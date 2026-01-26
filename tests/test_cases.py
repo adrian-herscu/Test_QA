@@ -1,16 +1,19 @@
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-import unittest
-from src.testing.test_framework import AmmeterTestFramework
-import threading
-import time
-from src.ammeters.main import (
+from main import (
     run_greenlee_emulator,
     run_entes_emulator,
     run_circutor_emulator
 )
+import time
+import threading
+from src.testing.test_framework import AmmeterTestFramework
+import unittest
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+
+# Import emulator functions from main.py
+
 
 class TestAmmeterFramework(unittest.TestCase):
     @classmethod
@@ -23,12 +26,12 @@ class TestAmmeterFramework(unittest.TestCase):
             threading.Thread(target=run_entes_emulator, daemon=True),
             threading.Thread(target=run_circutor_emulator, daemon=True)
         ]
-        
+
         for thread in cls.threads:
             thread.start()
-            
+
         time.sleep(5)  # המתנה להפעלת השרתים
-        
+
     def setUp(self):
         """
         הכנה לפני כל בדיקה
@@ -43,7 +46,7 @@ class TestAmmeterFramework(unittest.TestCase):
         self.assertIn("metadata", results)
         self.assertIn("measurements", results)
         self.assertIn("analysis", results)
-        
+
         # בדיקת טווח המדידות
         for measurement in results["measurements"]:
             self.assertGreater(measurement["value"], 0)
@@ -55,7 +58,7 @@ class TestAmmeterFramework(unittest.TestCase):
         """
         results = self.framework.run_test("entes")
         self.assertIn("analysis", results)
-        
+
         # בדיקת הניתוח הסטטיסטי
         analysis = results["analysis"]
         self.assertIn("mean", analysis)
@@ -67,7 +70,7 @@ class TestAmmeterFramework(unittest.TestCase):
         בדיקת מדידות של CIRCUTOR
         """
         results = self.framework.run_test("circutor")
-        
+
         # בדיקת המטא-דאטה
         metadata = results["metadata"]
         self.assertEqual(metadata["ammeter_type"], "circutor")
@@ -81,5 +84,6 @@ class TestAmmeterFramework(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.framework.run_test("invalid_type")
 
+
 if __name__ == '__main__':
-    unittest.main() 
+    unittest.main()

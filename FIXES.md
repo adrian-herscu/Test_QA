@@ -69,7 +69,49 @@ Incomplete command strings missing required parameters.
 
 ---
 
-## Bug #3: Numpy Boolean JSON Serialization
+## Bug #3: Scipy API Compatibility Issue
+
+**File:** `src/testing/result_analyzer.py`
+
+**Issue:**
+Code used old scipy API parameter `alpha` in `stats.t.interval()`, but newer scipy versions (≥1.11) renamed it to `confidence`:
+```python
+stats.t.interval(
+    alpha=0.95,  # Old API, deprecated in scipy 1.11+
+    df=len(values)-1,
+    loc=np.mean(values),
+    scale=stats.sem(values)
+)
+```
+
+**Error Message:**
+```
+TypeError: rv_generic.interval() missing 1 required positional argument: 'confidence'
+```
+
+**Impact:**
+Statistical analysis would crash when calculating confidence intervals, preventing test completion.
+
+**Fix:**
+Updated parameter name to match current scipy API:
+```python
+stats.t.interval(
+    confidence=0.95,  # New API (scipy ≥1.11)
+    df=len(values)-1,
+    loc=np.mean(values),
+    scale=stats.sem(values)
+)
+```
+
+**Root Cause:**
+Python 3.13 removed `distutils`, which older numpy/scipy versions depend on for building. This forced use of newer library versions that support Python 3.13. The requirements.txt specified `scipy>=1.7.0`, allowing any version - but only scipy ≥1.17 supports Python 3.13.
+
+**Solution:**
+Pinned to scipy 1.17.0 (tested with Python 3.13) and updated code to use the modern API.
+
+---
+
+## Bug #4: Numpy Boolean JSON Serialization
 
 **File:** `src/testing/result_analyzer.py`
 
@@ -100,7 +142,7 @@ Numpy operations return numpy types, not Python native types. JSON encoder only 
 
 ---
 
-## Bug #4: Missing Socket Implementation
+## Bug #5: Missing Socket Implementation
 
 **File:** `src/testing/data_collector.py`
 
@@ -148,7 +190,7 @@ Skeleton code intentionally left incomplete for implementation.
 
 ---
 
-## Bug #5: Main Script Exits Immediately
+## Bug #6: Main Script Exits Immediately
 
 **File:** `main.py`
 
@@ -181,7 +223,7 @@ Daemon threads only run while main program is running. Need to keep main thread 
 
 ---
 
-## Bug #6: CIRCUTOR Command Configuration
+## Bug #7: CIRCUTOR Command Configuration
 
 **File:** `config/test_config.yaml`
 
@@ -215,7 +257,7 @@ Config file didn't match actual ammeter implementation.
 
 ---
 
-## Bug #7: Import Path Issues
+## Bug #8: Import Path Issues
 
 **File:** `examples/run_tests.py`
 
@@ -252,6 +294,65 @@ from src.testing.test_framework import AmmeterTestFramework
 
 **Root Cause:**
 Python doesn't automatically include parent directories in module search path.
+
+---
+
+## Bug #9: Socket Address Reuse Issue
+
+**File:** `Ammeters/base_ammeter.py`
+
+**Issue:**
+After stopping `main.py` with Ctrl+C, the sockets remained in TIME_WAIT state, preventing immediate restart:
+```
+OSError: [Errno 98] Address already in use
+```
+
+**Impact:**
+Could not restart emulators without waiting 30-60 seconds or manually killing processes. Made development/testing workflow cumbersome.
+
+**Fix:**
+Added `SO_REUSEADDR` socket option before binding:
+```python
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    # Allow socket reuse to prevent "Address already in use" errors
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    s.bind(('localhost', self.port))
+    s.listen()
+```
+
+**Root Cause:**
+When a TCP connection closes, the socket enters TIME_WAIT state to ensure all packets are properly handled. Without SO_REUSEADDR, binding to the same port fails until TIME_WAIT expires.
+
+---
+
+## Bug #10: Async Error in Invalid Ammeter Validation
+
+**File:** `src/testing/test_framework.py`
+
+**Issue:**
+Invalid ammeter type validation happened in background thread (`_sampling_worker`), causing:
+- KeyError thrown in thread, not caught by main code
+- Tests would hang indefinitely waiting for queue data
+- No clear error message to user
+
+**Impact:**
+`test_invalid_ammeter_type` unit test would hang forever instead of properly catching the exception.
+
+**Fix:**
+Added validation at the start of `run_test()` before spawning threads:
+```python
+def run_test(self, ammeter_type: str) -> Dict:
+    # Validate ammeter type before starting
+    valid_types = list(self.config["ammeters"].keys())
+    if ammeter_type.lower() not in valid_types:
+        raise ValueError(f"Invalid ammeter type: {ammeter_type}. Must be one of {valid_types}")
+    
+    # Now safe to proceed with data collection
+    measurements = self.data_collector.collect_measurements(...)
+```
+
+**Root Cause:**
+Errors in background threads don't propagate to the calling code unless explicitly handled. Validation must happen synchronously before async operations begin.
 
 ---
 

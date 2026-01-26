@@ -5,10 +5,12 @@ from abc import ABC, abstractmethod
 
 NotImplementedErrorMsg = "Subclasses must implement this property."
 
+
 class AmmeterEmulatorBase(ABC):
     def __init__(self, port: int):
         self.port = port
-        random.seed(time.time())  # Seed the random number generator for each instance
+        # Seed the random number generator for each instance
+        random.seed(time.time())
 
     def start_server(self):
         """
@@ -16,6 +18,8 @@ class AmmeterEmulatorBase(ABC):
         The server will run indefinitely, handling one client request at a time.
         """
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            # Allow socket reuse to prevent "Address already in use" errors
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             s.bind(('localhost', self.port))
             s.listen()
             print(f"{self.__class__.__name__} is running on port {self.port}")
@@ -45,4 +49,3 @@ class AmmeterEmulatorBase(ABC):
         logic for current measurement.
         """
         raise NotImplementedError(NotImplementedErrorMsg)
-

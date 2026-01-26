@@ -35,7 +35,7 @@ This project provides emulators for different types of ammeters: Greenlee, ENTES
 ## CIRCUTOR Ammeter
 
 - **Port**: 5002
-- **Command**: `MEASURE_CIRCUTOR -get_measurement`
+- **Command**: `MEASURE_CIRCUTOR -get_measurement -current`
 - **Measurement Logic**: Calculates current using voltage values (0.1V - 1.0V) over a number of samples and a random time step (0.001s - 0.01s).
 - **Measurement method** : Rogowski Coil Integration: I = ∫V dt
 
@@ -43,3 +43,34 @@ To start the ammeter emulators and request current measurements, run the `main.p
 ```sh
 python main.py
 ```
+
+---
+
+## Testing Framework
+
+### Installation
+
+```bash
+pip install -r requirements.txt
+```
+
+### Running Tests
+
+1. Start the ammeter emulators:
+```bash
+python main.py
+```
+
+2. In a separate terminal, run the testing framework:
+```bash
+python examples/run_tests.py
+```
+
+Or run unit tests:
+```bash
+python -m unittest tests/test_cases.py
+```
+
+Results are saved to `results/` directory. Configuration can be adjusted in `config/test_config.yaml`.
+
+See [FIXES.md](FIXES.md) for bugs found and fixed.
