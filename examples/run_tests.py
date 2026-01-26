@@ -9,7 +9,7 @@ if sys.version_info < (3, 13):
     print("Please upgrade your Python version or use a compatible virtual environment.")
     sys.exit(1)
 
-from src.testing.test_framework import AmmeterTestFramework
+from test_qa.testing.test_framework import AmmeterTestFramework
 
 
 def main():

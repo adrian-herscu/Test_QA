@@ -13,7 +13,13 @@
         "**/*.pyc": true
     },
     "editor.formatOnSave": true,
-    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.typeCheckingMode": "strict",
+    "python.analysis.diagnosticMode": "workspace",
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.inlayHints.functionReturnTypes": true,
+    "python.analysis.inlayHints.variableTypes": true,
     "python.linting.enabled": true,
-    "terminal.integrated.cwd": "${workspaceFolder}"
+    "terminal.integrated.cwd": "${workspaceFolder}",
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000
 }

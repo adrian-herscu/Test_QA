@@ -11,10 +11,10 @@ if sys.version_info < (3, 13):
 import threading
 import time
 
-from Ammeters.Circutor_Ammeter import CircutorAmmeter
-from Ammeters.Entes_Ammeter import EntesAmmeter
-from Ammeters.Greenlee_Ammeter import GreenleeAmmeter
-from Ammeters.client import request_current_from_ammeter
+from test_qa.ammeters.circutor_ammeter import CircutorAmmeter
+from test_qa.ammeters.entes_ammeter import EntesAmmeter
+from test_qa.ammeters.greenlee_ammeter import GreenleeAmmeter
+from test_qa.ammeters.client import request_current_from_ammeter
 
 
 def run_greenlee_emulator():

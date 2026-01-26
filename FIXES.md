@@ -264,8 +264,8 @@ Config file didn't match actual ammeter implementation.
 **Issue:**
 Module imports failed because project root wasn't in Python path:
 ```python
-from src.testing.test_framework import AmmeterTestFramework
-# ModuleNotFoundError: No module named 'src'
+from test_qa.testing.test_framework import AmmeterTestFramework
+# ModuleNotFoundError: No module named 'test_qa'
 ```
 
 **Impact:**
@@ -280,7 +280,7 @@ import os
 # Add parent directory to path so we can import src module
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.testing.test_framework import AmmeterTestFramework
+from test_qa.testing.test_framework import AmmeterTestFramework
 ```
 
 **Note:** Used formatter disable comments to prevent auto-sorting from breaking the fix:

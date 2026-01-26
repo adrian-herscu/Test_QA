@@ -4,15 +4,27 @@ This project provides emulators for different types of ammeters: Greenlee, ENTES
 
 ## Project Structure
 
-- `Ammeters/`
-  - `main.py`: Main script to start the ammeter emulators and request current measurements.
-  - `Circutor_Ammeter.py`: Emulator for the CIRCUTOR ammeter.
-  - `Entes_Ammeter.py`: Emulator for the ENTES ammeter.
-  - `Greenlee_Ammeter.py`: Emulator for the Greenlee ammeter.
-  - `base_ammeter.py`: Base class for all ammeter emulators.
-  - `client.py`: Client to request current measurements from the ammeter emulators.
-- `Utiles/`
-  - `Utils.py`: Utility functions, including `generate_random_float`.
+- `src/test_qa/` - Main package (installed with `pip install -e .`)
+  - `ammeters/` - Ammeter emulator implementations
+    - `base_ammeter.py` - Base class for all ammeter emulators
+    - `circutor_ammeter.py` - CIRCUTOR ammeter emulator
+    - `entes_ammeter.py` - ENTES ammeter emulator
+    - `greenlee_ammeter.py` - Greenlee ammeter emulator
+    - `client.py` - Client to request current measurements
+  - `testing/` - Testing framework components
+    - `test_framework.py` - Core testing infrastructure
+    - `data_collector.py` - Data collection utilities
+    - `error_simulator.py` - Error simulation for testing
+    - `result_analyzer.py` - Result analysis tools
+    - `visualizer.py` - Data visualization
+  - `utils/` - Utility functions
+    - `utils.py` - Common utilities including `generate_random_float`
+    - `config.py` - Configuration management
+    - `logger.py` - Logging utilities
+    - `ammeter_comparison.py` - Ammeter comparison tools
+- `examples/` - Usage examples and demos
+- `tests/` - Unit tests
+- `config/` - Configuration files
 
 ## Usage
 
@@ -39,9 +51,9 @@ This project provides emulators for different types of ammeters: Greenlee, ENTES
 - **Measurement Logic**: Calculates current using voltage values (0.1V - 1.0V) over a number of samples and a random time step (0.001s - 0.01s).
 - **Measurement method** : Rogowski Coil Integration: I = ∫V dt
 
-To start the ammeter emulators and request current measurements, run the `main.py` script:
+To start the ammeter emulators and request current measurements, run:
 ```sh
-python main.py
+python examples/run_emulators.py
 ```
 
 ---
@@ -63,7 +75,7 @@ This will install all dependencies and make the project modules importable.
 
 1. Start the ammeter emulators:
 ```bash
-python main.py
+python examples/run_emulators.py
 ```
 
 2. In a separate terminal, run the testing framework:
@@ -110,7 +122,7 @@ This generates a summary report showing:
 
 Or use programmatically:
 ```python
-from src.utils.ammeter_comparison import AmmeterComparison
+from test_qa.utils.ammeter_comparison import AmmeterComparison
 
 comparison = AmmeterComparison()
 

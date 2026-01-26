@@ -1,5 +1,7 @@
 from socket import socket, AF_INET, SOCK_STREAM
 
+# NOTE used only in main.py -- some kind of self test
+
 
 def request_current_from_ammeter(port: int, command: bytes):
     with socket(AF_INET, SOCK_STREAM) as s:
@@ -7,7 +9,7 @@ def request_current_from_ammeter(port: int, command: bytes):
         s.sendall(command)
         data = s.recv(1024)
         if data:
-            print(f"Received current measurement from port {port}: {data.decode('utf-8')} A")
+            print(
+                f"Received current measurement from port {port}: {data.decode('utf-8')} A")
         else:
             print("No data received.")
-

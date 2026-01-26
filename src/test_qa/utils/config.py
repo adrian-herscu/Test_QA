@@ -1,14 +1,14 @@
 import yaml
-from typing import Dict
+from typing import Dict, Any
 
-def load_config(config_path: str) -> Dict:
+def load_config(config_path: str) -> Dict[str, Any]:
     """
     טעינת קובץ הקונפיגורציה
     """
     with open(config_path, 'r') as f:
         return yaml.safe_load(f)
 
-def validate_config(config: Dict) -> bool:
+def validate_config(config: Dict[str, Any]) -> bool:
     """
     וידוא תקינות הקונפיגורציה
     """
@@ -26,4 +26,4 @@ def validate_config(config: Dict) -> bool:
     if sampling['sampling_frequency_hz'] <= 0:
         raise ValueError("sampling_frequency_hz must be positive")
     
-    return True 
+    return True

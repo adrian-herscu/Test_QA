@@ -12,12 +12,13 @@ Run this after starting the ammeter emulators with: python main.py
 """
 
 import time
-from src.testing.error_simulator import ErrorSimulator
-from src.testing.data_collector import DataCollector
-from src.utils.config import load_config
+from typing import Any, Dict
+from test_qa.testing.error_simulator import ErrorSimulator
+from test_qa.testing.data_collector import DataCollector
+from test_qa.utils.config import load_config
 
 
-def run_error_simulation_demo():
+def run_error_simulation_demo() -> None:
     """Demonstrate error handling with simulated failures"""
 
     print("=" * 60)
@@ -26,10 +27,10 @@ def run_error_simulation_demo():
     print("\nThis demo shows how the framework handles measurement errors.\n")
 
     # Load config
-    config = load_config("config/test_config.yaml")
+    config: Dict[str, Any] = load_config("config/test_config.yaml")
 
     # Configure error simulator with 20% error rate
-    error_config = {
+    error_config: Dict[str, Any] = {
         "enabled": True,
         "error_rate": 0.2,  # 20% of measurements will fail
         "error_types": {
@@ -88,7 +89,7 @@ def run_error_simulation_demo():
     # Show error breakdown
     if collector.errors_encountered:
         print(f"\nError breakdown by type:")
-        error_types = {}
+        error_types: Dict[str, int] = {}
         for error in collector.errors_encountered:
             error_type = error['error_type']
             error_types[error_type] = error_types.get(error_type, 0) + 1

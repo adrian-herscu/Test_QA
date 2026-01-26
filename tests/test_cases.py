@@ -5,7 +5,7 @@ from main import (
 )
 import time
 import threading
-from src.testing.test_framework import AmmeterTestFramework
+from test_qa.testing.test_framework import AmmeterTestFramework
 import unittest
 import sys
 import os
