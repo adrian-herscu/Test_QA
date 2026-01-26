@@ -1,5 +1,3 @@
-# fmt: off
-# isort: off
 import sys
 import os
 
@@ -11,12 +9,7 @@ if sys.version_info < (3, 13):
     print("Please upgrade your Python version or use a compatible virtual environment.")
     sys.exit(1)
 
-# Add parent directory to path so we can import src module
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from src.testing.test_framework import AmmeterTestFramework
-# fmt: on
-# isort: on
 
 
 def main():

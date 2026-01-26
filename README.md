@@ -50,9 +50,14 @@ python main.py
 
 ### Installation
 
+**Requirements**: Python 3.13 or higher
+
+Install the project in development mode:
 ```bash
-pip install -r requirements.txt
+pip install -e .
 ```
+
+This will install all dependencies and make the project modules importable.
 
 ### Running Tests
 

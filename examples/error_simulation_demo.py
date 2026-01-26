@@ -11,20 +11,10 @@ This example shows how the framework handles various measurement errors:
 Run this after starting the ammeter emulators with: python main.py
 """
 
-# fmt: off
-# isort: off
-import sys
-import os
-# Add parent directory to path for imports
-sys.path.insert(0, os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '..')))
 import time
 from src.testing.error_simulator import ErrorSimulator
 from src.testing.data_collector import DataCollector
 from src.utils.config import load_config
-
-# fmt: on
-# isort: on
 
 
 def run_error_simulation_demo():

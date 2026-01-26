@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "test-qa"
+version = "0.1.0"
+description = "Ammeter Testing Framework"
+requires-python = ">=3.13"
+dependencies = [
+    "numpy==2.4.1",
+    "scipy==1.17.0",
+    "matplotlib==3.10.8",
+    "seaborn==0.13.2",
+    "pyyaml==6.0.3",
+    "pandas==3.0.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*", "Ammeters*", "Utiles*"]
