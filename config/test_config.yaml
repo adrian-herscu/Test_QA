@@ -13,7 +13,7 @@ ammeters:
     command: "MEASURE_ENTES -get_data"
   circutor:
     port: 5002
-    command: "MEASURE_CIRCUTOR -get_measurement"
+    command: "MEASURE_CIRCUTOR -get_measurement -current"
 
 analysis:
   statistical_metrics:
@@ -36,4 +36,4 @@ result_management:
     - timestamp
     - ammeter_type
     - test_duration
-    - sampling_frequency 
+    - sampling_frequency

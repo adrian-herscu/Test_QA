@@ -21,14 +21,8 @@ var/
 *.egg
 
 # Results
-results/logs/*
-!results/logs/.gitkeep
-results/measurements/*
-!results/measurements/.gitkeep
-results/plots/*
-!results/plots/.gitkeep
-results/analysis/*
-!results/analysis/.gitkeep
+results/
+!results/.gitkeep
 
 # IDE
 .idea/
@@ -37,4 +31,18 @@ results/analysis/*
 
 # Virtual Environment
 venv/
-ENV/ 
+.venv/
+ENV/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log 
