@@ -73,4 +73,50 @@ python -m unittest tests/test_cases.py
 
 Results are saved to `results/` directory. Configuration can be adjusted in `config/test_config.yaml`.
 
+### Error Simulation
+
+To test error handling capabilities with simulated measurement failures:
+
+```bash
+python examples/error_simulation_demo.py
+```
+
+This demonstrates how the framework handles:
+- Measurement timeouts
+- Corrupt data responses
+- Connection failures
+- Empty responses
+- Invalid measurement values
+
+The error simulator can be integrated into tests by configuring error rates and failure types.
+
+### Comparing Ammeter Accuracy
+
+To compare results across different ammeter types and identify the most reliable:
+
+```bash
+python src/utils/ammeter_comparison.py
+```
+
+This generates a summary report showing:
+- Statistics for each ammeter type (mean, std dev, consistency)
+- Reliability scores based on precision and outlier frequency
+- Identification of the most reliable ammeter
+
+Or use programmatically:
+```python
+from src.utils.ammeter_comparison import AmmeterComparison
+
+comparison = AmmeterComparison()
+
+# Get summary report
+print(comparison.generate_summary_report())
+
+# Find specific tests
+greenlee_tests = comparison.find_tests(ammeter_type="greenlee")
+
+# Compare specific test runs
+results = comparison.compare_tests(["test-id-1", "test-id-2"])
+```
+
 See [FIXES.md](FIXES.md) for bugs found and fixed.

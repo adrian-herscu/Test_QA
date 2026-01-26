@@ -1,13 +1,16 @@
 import time
-from typing import List, Dict
+from typing import List, Dict, Optional
 import threading
 import queue
+from .error_simulator import ErrorSimulator
 
 
 class DataCollector:
-    def __init__(self, config: Dict):
+    def __init__(self, config: Dict, error_simulator: Optional[ErrorSimulator] = None):
         self.config = config
         self.measurement_queue = queue.Queue()
+        self.error_simulator = error_simulator
+        self.errors_encountered = []
 
     def collect_measurements(self, ammeter_type: str, test_id: str) -> List[Dict]:
         """
@@ -75,7 +78,30 @@ class DataCollector:
                 s.sendall(command)
                 data = s.recv(1024)
                 if data:
-                    return float(data.decode('utf-8'))
+                    value = float(data.decode('utf-8'))
+
+                    # Apply error simulation if enabled
+                    if self.error_simulator:
+                        try:
+                            value = self.error_simulator.inject_error(value)
+                            if value is None:
+                                raise ValueError(
+                                    "Empty response from error simulator")
+                            if not isinstance(value, (int, float)):
+                                raise ValueError(
+                                    f"Invalid data type from error simulator: {type(value)}")
+                        except (TimeoutError, ConnectionRefusedError, ValueError) as e:
+                            # Log error but allow retry mechanism to handle it
+                            error_info = {
+                                "ammeter_type": ammeter_type,
+                                "error_type": type(e).__name__,
+                                "error_message": str(e),
+                                "timestamp": time.time()
+                            }
+                            self.errors_encountered.append(error_info)
+                            raise
+
+                    return value
                 else:
                     raise ValueError(f"No data received from {ammeter_type}")
         except (socket.error, ValueError) as e:
