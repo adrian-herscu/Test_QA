@@ -64,7 +64,60 @@ python examples/run_emulators.py
 
 **Requirements**: Python 3.13 or higher
 
-Install the project in development mode:
+#### Quick Setup (Recommended)
+
+Use the automated setup script to create a virtual environment and install all dependencies in one command:
+
+**Linux/macOS:**
+```bash
+python3 setup_dev.py
+```
+
+**Windows:**
+```bash
+python setup_dev.py
+```
+
+This script will:
+1. Verify Python 3.13+ is installed
+2. Create a virtual environment (`.venv/`)
+3. Upgrade pip
+4. Install the project in editable mode
+
+Then activate the virtual environment:
+
+**Linux/macOS:**
+```bash
+source .venv/bin/activate
+```
+
+**Windows:**
+```bash
+.venv\Scripts\activate
+```
+
+#### Manual Setup
+
+If you prefer manual setup, follow these steps:
+
+**1. Create a virtual environment:**
+```bash
+python -m venv .venv
+```
+
+**2. Activate the virtual environment:**
+
+Linux/macOS:
+```bash
+source .venv/bin/activate
+```
+
+Windows:
+```bash
+.venv\Scripts\activate
+```
+
+**3. Install the project:**
 ```bash
 pip install -e .
 ```
