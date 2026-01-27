@@ -1,7 +1,7 @@
-from main import (
+from examples.run_emulators import (
     run_greenlee_emulator,
     run_entes_emulator,
-    run_circutor_emulator
+    run_circutor_emulator,
 )
 import time
 import threading

@@ -1,5 +1,5 @@
 import sys
-import os
+from typing import Any, Dict
 
 # Check Python version
 if sys.version_info < (3, 13):
@@ -18,7 +18,7 @@ def main():
 
     # הרצת בדיקות לכל סוגי האמפרמטרים
     ammeter_types = ["greenlee", "entes", "circutor"]
-    results = {}
+    results: Dict[str, Dict[str, Any]] = {}
 
     for ammeter_type in ammeter_types:
         print(f"Testing {ammeter_type} ammeter...")

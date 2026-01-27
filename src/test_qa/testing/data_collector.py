@@ -110,3 +110,8 @@ class DataCollector:
         except (socket.error, ValueError) as e:
             raise RuntimeError(
                 f"Failed to get measurement from {ammeter_type}: {str(e)}")
+
+    def get_single_measurement(self, ammeter_type: str) -> float:
+        """Public helper for fetching one measurement from an ammeter."""
+        ammeter_config: Dict[str, Any] = self.config["ammeters"][ammeter_type]
+        return self._get_measurement(ammeter_type, ammeter_config)

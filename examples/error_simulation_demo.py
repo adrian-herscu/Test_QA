@@ -59,9 +59,7 @@ def run_error_simulation_demo() -> None:
 
         for i in range(20):
             try:
-                ammeter_config = config["ammeters"][ammeter_type]
-                measurement = collector._get_measurement(
-                    ammeter_type, ammeter_config)
+                measurement = collector.get_single_measurement(ammeter_type)
                 successes += 1
                 print(f"  ✓ Measurement {i+1}: {measurement:.2f}A")
             except Exception as e:

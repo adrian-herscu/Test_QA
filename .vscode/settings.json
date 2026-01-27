@@ -13,7 +13,6 @@
         "**/*.pyc": true
     },
     "editor.formatOnSave": true,
-    "python.analysis.typeCheckingMode": "strict",
     "python.analysis.diagnosticMode": "workspace",
     "python.analysis.autoImportCompletions": true,
     "python.analysis.inlayHints.functionReturnTypes": true,

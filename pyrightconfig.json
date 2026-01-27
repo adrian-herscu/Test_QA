@@ -1,0 +1,13 @@
+{
+    "include": [
+        "src",
+        "examples",
+        "tests"
+    ],
+    "extraPaths": [
+        "./src"
+    ],
+    "pythonVersion": "3.13",
+    "reportMissingImports": "error",
+    "typeCheckingMode": "strict"
+}

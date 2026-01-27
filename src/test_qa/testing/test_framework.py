@@ -1,7 +1,6 @@
-import time
 import uuid
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from ..utils.config import load_config
 from .data_collector import DataCollector
