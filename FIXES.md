@@ -423,6 +423,12 @@ Created `__init__.py` files for proper Python package structure:
 - Simplified results exclusion pattern
 - Added test coverage and log file patterns
 
+### Pylance / Pyright
+
+- Issue: Pylance reported missing imports for `test_qa` modules in `src`.
+- Fix: Configured [pyrightconfig.json](pyrightconfig.json) with `include` for `src`, `examples`, `tests` and `extraPaths` set to `./src`; set `pythonVersion` to `3.13` and `typeCheckingMode` to `strict`.
+- Impact: Editor resolves imports correctly and provides consistent type checking.
+
 ---
 
 ## Testing
