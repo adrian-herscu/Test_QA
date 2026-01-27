@@ -5,14 +5,8 @@ from examples.run_emulators import (
 )
 import time
 import threading
-from test_qa.testing.test_framework import AmmeterTestFramework
 import unittest
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-
-# Import emulator functions from main.py
+from test_qa.testing.test_framework import AmmeterTestFramework
 
 
 class TestAmmeterFramework(unittest.TestCase):

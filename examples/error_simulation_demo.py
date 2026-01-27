@@ -8,7 +8,7 @@ This example shows how the framework handles various measurement errors:
 - Empty responses
 - Invalid values
 
-Run this after starting the ammeter emulators with: python main.py
+Run this after starting the ammeter emulators with: python examples/run_emulators.py
 """
 
 import time
@@ -110,7 +110,7 @@ def run_error_simulation_demo() -> None:
 
 if __name__ == "__main__":
     print("\nStarting error simulation demo...")
-    print("Make sure ammeter emulators are running (python main.py)\n")
+    print("Make sure ammeter emulators are running (python examples/run_emulators.py)\n")
 
     try:
         run_error_simulation_demo()
@@ -119,4 +119,4 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"\n\nDemo failed: {type(e).__name__}: {str(e)}")
         print("\nMake sure the ammeter emulators are running:")
-        print("  python main.py")
+        print("  python examples/run_emulators.py")
