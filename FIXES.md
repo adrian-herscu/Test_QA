@@ -10,10 +10,10 @@ During the implementation of the ammeter testing framework, several bugs were id
 
 ## Bug #1: Incorrect Port Numbers
 
-**File:** `main.py`
+**File:** `examples/run_emulators.py`
 
 **Issue:**
-The port numbers used in `main.py` did not match the specifications in `README.md`:
+The port numbers used in `examples/run_emulators.py` did not match the specifications in `README.md`:
 - README specified: Greenlee (5000), ENTES (5001), CIRCUTOR (5002)
 - Code used: Greenlee (5001), ENTES (5002), CIRCUTOR (5003)
 
@@ -21,7 +21,7 @@ The port numbers used in `main.py` did not match the specifications in `README.m
 Client code attempting to connect to ammeters using README specifications would fail to establish connections.
 
 **Fix:**
-Updated port assignments in `main.py`:
+Updated port assignments in `examples/run_emulators.py`:
 ```python
 # Before
 greenlee = GreenleeAmmeter(5001)
@@ -41,7 +41,7 @@ Mismatch between documentation and implementation, likely from copy-paste error.
 
 ## Bug #2: Incomplete Ammeter Commands
 
-**File:** `main.py` (commented code)
+**File:** `examples/run_emulators.py` (commented code)
 
 **Issue:**
 The commented test code used incomplete commands that didn't match the ammeter implementations:
@@ -192,7 +192,7 @@ Skeleton code intentionally left incomplete for implementation.
 
 ## Bug #6: Main Script Exits Immediately
 
-**File:** `main.py`
+**File:** `examples/run_emulators.py`
 
 **Issue:**
 The main script would start ammeter threads and immediately exit:
@@ -259,41 +259,31 @@ Config file didn't match actual ammeter implementation.
 
 ## Bug #8: Import Path Issues
 
-**File:** `examples/run_tests.py`
+**File:** `examples/run_tests.py`, `tests/test_cases.py`
 
 **Issue:**
 Module imports failed because project root wasn't in Python path:
 ```python
-from src.testing.test_framework import AmmeterTestFramework
-# ModuleNotFoundError: No module named 'src'
+from test_qa.testing.test_framework import AmmeterTestFramework
+# ModuleNotFoundError: No module named 'test_qa'
 ```
 
 **Impact:**
 Example scripts couldn't import framework modules.
 
-**Fix:**
-Added path manipulation before imports:
-```python
-import sys
-import os
+**Initial Fix:**
+Temporarily used path manipulation, but this was error-prone and required formatter disable comments.
 
-# Add parent directory to path so we can import src module
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from src.testing.test_framework import AmmeterTestFramework
+**Final Solution:**
+Configured the project as a proper installable package using `pyproject.toml` and installed in editable mode:
+```bash
+pip install -e .
 ```
 
-**Note:** Used formatter disable comments to prevent auto-sorting from breaking the fix:
-```python
-# fmt: off
-# isort: off
-# ... path manipulation and imports ...
-# fmt: on
-# isort: on
-```
+This makes the `test_qa` module available system-wide in the virtual environment, eliminating the need for any sys.path manipulation.
 
 **Root Cause:**
-Python doesn't automatically include parent directories in module search path.
+Project wasn't configured as an installable package. Modern Python projects should use `pyproject.toml` and editable installs rather than path hacks.
 
 ---
 
@@ -302,7 +292,7 @@ Python doesn't automatically include parent directories in module search path.
 **File:** `Ammeters/base_ammeter.py`
 
 **Issue:**
-After stopping `main.py` with Ctrl+C, the sockets remained in TIME_WAIT state, preventing immediate restart:
+After stopping `examples/run_emulators.py` with Ctrl+C, the sockets remained in TIME_WAIT state, preventing immediate restart:
 ```
 OSError: [Errno 98] Address already in use
 ```
@@ -423,12 +413,18 @@ Created `__init__.py` files for proper Python package structure:
 - Simplified results exclusion pattern
 - Added test coverage and log file patterns
 
+### Pylance / Pyright
+
+- Issue: Pylance reported missing imports for `test_qa` modules in `src`.
+- Fix: Configured [pyrightconfig.json](pyrightconfig.json) with `include` for `src`, `examples`, `tests` and `extraPaths` set to `./src`; set `pythonVersion` to `3.13` and `typeCheckingMode` to `strict`.
+- Impact: Editor resolves imports correctly and provides consistent type checking.
+
 ---
 
 ## Testing
 
 All fixes were verified by:
-1. Starting ammeter emulators: `python main.py`
+1. Starting ammeter emulators: `python examples/run_emulators.py`
 2. Running test framework: `python examples/run_tests.py`
 3. Verifying output shows successful measurements from all three ammeters
 4. Confirming JSON results saved to `results/` directory

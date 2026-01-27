@@ -1,9 +1,12 @@
 import json
 import os
-from datetime import datetime
-from typing import List, Dict, Optional
 from pathlib import Path
+from typing import Any, Dict, List, Optional
+
 import numpy as np
+
+TestResult = Dict[str, Any]
+ComparisonDict = Dict[str, Any]
 
 
 class AmmeterComparison:
@@ -12,7 +15,7 @@ class AmmeterComparison:
     def __init__(self, results_path: str = "results/"):
         self.results_path = results_path
 
-    def load_result(self, test_id: str) -> Dict:
+    def load_result(self, test_id: str) -> TestResult:
         """Load a single test result by ID"""
         filepath = os.path.join(self.results_path, f"{test_id}.json")
         if not os.path.exists(filepath):
@@ -21,10 +24,12 @@ class AmmeterComparison:
         with open(filepath, 'r') as f:
             return json.load(f)
 
-    def find_tests(self,
-                   ammeter_type: Optional[str] = None,
-                   from_date: Optional[str] = None,
-                   to_date: Optional[str] = None) -> List[Dict]:
+    def find_tests(
+        self,
+        ammeter_type: Optional[str] = None,
+        from_date: Optional[str] = None,
+        to_date: Optional[str] = None
+    ) -> List[TestResult]:
         """
         Find tests matching criteria
 
@@ -36,7 +41,7 @@ class AmmeterComparison:
         Returns:
             List of test result dictionaries
         """
-        results = []
+        results: List[TestResult] = []
 
         # Get all JSON files
         json_files = Path(self.results_path).glob("*.json")
@@ -70,7 +75,7 @@ class AmmeterComparison:
         results.sort(key=lambda x: x['metadata']['timestamp'], reverse=True)
         return results
 
-    def compare_tests(self, test_ids: List[str]) -> Dict:
+    def compare_tests(self, test_ids: List[str]) -> ComparisonDict:
         """
         Compare multiple tests and return statistical summary
 
@@ -80,15 +85,16 @@ class AmmeterComparison:
         Returns:
             Comparison dictionary with statistics for each test
         """
-        comparison = {
+        tests: List[TestResult] = []
+        comparison: ComparisonDict = {
             'test_count': len(test_ids),
-            'tests': []
+            'tests': tests
         }
 
         for test_id in test_ids:
-            result = self.load_result(test_id)
+            result: TestResult = self.load_result(test_id)
 
-            comparison['tests'].append({
+            tests.append({
                 'test_id': test_id,
                 'ammeter_type': result['metadata']['ammeter_type'],
                 'timestamp': result['metadata']['timestamp'],
@@ -101,17 +107,17 @@ class AmmeterComparison:
 
         return comparison
 
-    def compare_ammeter_types(self) -> Dict:
+    def compare_ammeter_types(self) -> ComparisonDict:
         """
         Compare all ammeter types to determine relative accuracy
 
         Returns:
             Dictionary with comparison metrics for each ammeter type
         """
-        all_tests = self.find_tests()
+        all_tests: List[TestResult] = self.find_tests()
 
         # Group by ammeter type
-        by_type = {}
+        by_type: Dict[str, List[TestResult]] = {}
         for test in all_tests:
             ammeter_type = test['metadata']['ammeter_type']
             if ammeter_type not in by_type:
@@ -119,7 +125,7 @@ class AmmeterComparison:
             by_type[ammeter_type].append(test)
 
         # Calculate aggregate statistics
-        comparison = {}
+        comparison: Dict[str, Dict[str, float | int]] = {}
         for ammeter_type, tests in by_type.items():
             means = [t['analysis']['mean'] for t in tests]
             std_devs = [t['analysis']['std_dev'] for t in tests]
@@ -160,14 +166,14 @@ class AmmeterComparison:
         if not all_tests:
             return "No test results found."
 
-        report = []
+        report: List[str] = []
         report.append("=" * 60)
         report.append("AMMETER TEST RESULTS SUMMARY")
         report.append("=" * 60)
         report.append(f"\nTotal tests: {len(all_tests)}")
 
         # Count by type
-        by_type = {}
+        by_type: Dict[str, int] = {}
         for test in all_tests:
             ammeter_type = test['metadata']['ammeter_type']
             by_type[ammeter_type] = by_type.get(ammeter_type, 0) + 1

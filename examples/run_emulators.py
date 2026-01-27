@@ -11,10 +11,9 @@ if sys.version_info < (3, 13):
 import threading
 import time
 
-from Ammeters.Circutor_Ammeter import CircutorAmmeter
-from Ammeters.Entes_Ammeter import EntesAmmeter
-from Ammeters.Greenlee_Ammeter import GreenleeAmmeter
-from Ammeters.client import request_current_from_ammeter
+from test_qa.ammeters.circutor_ammeter import CircutorAmmeter
+from test_qa.ammeters.entes_ammeter import EntesAmmeter
+from test_qa.ammeters.greenlee_ammeter import GreenleeAmmeter
 
 
 def run_greenlee_emulator():
@@ -43,6 +42,7 @@ if __name__ == "__main__":
     print("\nAmmeter emulators are running. Press Ctrl+C to stop.\n")
 
     # Optional: Test with a single measurement to verify connectivity
+    # from test_qa.ammeters.client import request_current_from_ammeter
     # request_current_from_ammeter(5000, b'MEASURE_GREENLEE -get_measurement')
     # request_current_from_ammeter(5001, b'MEASURE_ENTES -get_data')
     # request_current_from_ammeter(5002, b'MEASURE_CIRCUTOR -get_measurement -current')

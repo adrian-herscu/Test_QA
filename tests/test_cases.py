@@ -1,18 +1,7 @@
-from main import (
-    run_greenlee_emulator,
-    run_entes_emulator,
-    run_circutor_emulator
-)
 import time
 import threading
-from src.testing.test_framework import AmmeterTestFramework
 import unittest
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-
-# Import emulator functions from main.py
+from test_qa.testing.test_framework import AmmeterTestFramework
 
 
 class TestAmmeterFramework(unittest.TestCase):
@@ -21,6 +10,12 @@ class TestAmmeterFramework(unittest.TestCase):
         """
         הפעלת האמפרמטרים לפני הבדיקות
         """
+        from examples.run_emulators import (
+            run_greenlee_emulator,
+            run_entes_emulator,
+            run_circutor_emulator,
+        )
+
         cls.threads = [
             threading.Thread(target=run_greenlee_emulator, daemon=True),
             threading.Thread(target=run_entes_emulator, daemon=True),

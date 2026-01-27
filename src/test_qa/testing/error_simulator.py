@@ -17,7 +17,7 @@ class ErrorSimulator:
     Simulates various measurement errors for testing error handling capabilities
     """
 
-    def __init__(self, config: Optional[Dict] = None):
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
         """
         Initialize error simulator
 
@@ -65,8 +65,8 @@ class ErrorSimulator:
 
     def get_error_type(self) -> ErrorType:
         """Select which type of error to inject based on configured probabilities"""
-        error_weights = []
-        error_values = []
+        error_weights: list[float] = []
+        error_values: list[ErrorType] = []
 
         for error_name, probability in self.error_types.items():
             try:
@@ -122,7 +122,7 @@ class ErrorSimulator:
 
         return data
 
-    def get_statistics(self) -> Dict:
+    def get_statistics(self) -> Dict[str, Any]:
         """Get error injection statistics"""
         return {
             "total_calls": self.total_calls,

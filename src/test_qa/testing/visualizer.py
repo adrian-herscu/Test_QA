@@ -1,38 +1,44 @@
-import matplotlib.pyplot as plt
-import seaborn as sns
-from typing import List, Dict
 import os
+from typing import Any, Dict, List
+
+import matplotlib.pyplot as _plt
+import seaborn as _sns
+
+# Matplotlib/Seaborn stubs expose Unknown kwargs; treat modules as Any to silence Pylance "partially unknown" noise.
+plt: Any = _plt
+sns: Any = _sns
+
 
 class DataVisualizer:
-    def __init__(self, config: Dict):
-        self.config = config
-        self.plot_types = config["analysis"]["visualization"]["plot_types"]
-        
-    def create_visualizations(self, measurements: List[Dict], test_id: str, ammeter_type: str):
+    def __init__(self, config: Dict[str, Any]):
+        self.config: Dict[str, Any] = config
+        self.plot_types: List[str] = config["analysis"]["visualization"]["plot_types"]
+
+    def create_visualizations(self, measurements: List[Dict[str, Any]], test_id: str, ammeter_type: str):
         """
         יצירת ויזואליזציות שונות של הנתונים
         """
-        values = [m["value"] for m in measurements]
-        timestamps = [m["timestamp"] for m in measurements]
-        
+        values: List[float] = [m["value"] for m in measurements]
+        timestamps: List[float] = [m["timestamp"] for m in measurements]
+
         # יצירת תיקיית התוצאות
         save_dir = f"{self.config['result_management']['save_path']}/plots/{test_id}"
         os.makedirs(save_dir, exist_ok=True)
 
         for plot_type in self.plot_types:
             plt.figure(figsize=(10, 6))
-            
+
             if plot_type == "time_series":
                 self._create_time_series(timestamps, values, ammeter_type)
             elif plot_type == "histogram":
                 self._create_histogram(values, ammeter_type)
             elif plot_type == "box_plot":
                 self._create_box_plot(values, ammeter_type)
-            
+
             plt.savefig(f"{save_dir}/{plot_type}.png")
             plt.close()
 
-    def _create_time_series(self, timestamps, values, ammeter_type):
+    def _create_time_series(self, timestamps: List[float], values: List[float], ammeter_type: str):
         """
         יצירת גרף מדידות לאורך זמן
         """
@@ -43,7 +49,7 @@ class DataVisualizer:
         plt.ylabel('Current (A)')
         plt.grid(True)
 
-    def _create_histogram(self, values, ammeter_type):
+    def _create_histogram(self, values: List[float], ammeter_type: str):
         """
         יצירת היסטוגרמה של המדידות
         """
@@ -52,11 +58,11 @@ class DataVisualizer:
         plt.xlabel('Current (A)')
         plt.ylabel('Count')
 
-    def _create_box_plot(self, values, ammeter_type):
+    def _create_box_plot(self, values: List[float], ammeter_type: str):
         """
         יצירת תרשים קופסה של המדידות
         """
         plt.boxplot(values)
         plt.title(f'Box Plot - {ammeter_type}')
         plt.ylabel('Current (A)')
-        plt.xticks([1], [ammeter_type]) 
+        plt.xticks([1], [ammeter_type])

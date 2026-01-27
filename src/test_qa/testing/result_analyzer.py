@@ -1,19 +1,19 @@
 import numpy as np
-from typing import List, Dict
+from typing import Any, Dict, List, Tuple, cast
 from scipy import stats
 
 
 class ResultAnalyzer:
-    def __init__(self, config: Dict):
+    def __init__(self, config: Dict[str, Any]):
         self.config = config
         self.metrics = config["analysis"]["statistical_metrics"]
 
-    def analyze(self, measurements: List[Dict]) -> Dict:
+    def analyze(self, measurements: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
         ניתוח סטטיסטי של המדידות
         """
         values = [m["value"] for m in measurements]
-        results = {}
+        results: Dict[str, Any] = {}
 
         # חישוב מדדים סטטיסטיים בסיסיים
         if "mean" in self.metrics:
@@ -32,19 +32,27 @@ class ResultAnalyzer:
 
         return results
 
-    def _advanced_analysis(self, values: List[float]) -> Dict:
+    def _advanced_analysis(self, values: List[float]) -> Dict[str, Any]:
         """
         ניתוח סטטיסטי מתקדם
         """
-        advanced_results = {
-            "skewness": float(stats.skew(values)),  # א-סימטריה
-            "kurtosis": float(stats.kurtosis(values)),  # התפלגות
-            "confidence_interval_95": list(stats.t.interval(
+        skewness_value: float = float(stats.skew(values))  # type: ignore[arg-type]
+        kurtosis_value: float = float(stats.kurtosis(values))  # type: ignore[arg-type]
+        
+        ci_tuple: Tuple[float, float] = cast(
+            Tuple[float, float],
+            stats.t.interval(
                 confidence=0.95,
                 df=len(values)-1,
                 loc=np.mean(values),
                 scale=stats.sem(values)
-            )),
+            )
+        )
+        
+        advanced_results: Dict[str, Any] = {
+            "skewness": skewness_value,  # א-סימטריה
+            "kurtosis": kurtosis_value,  # התפלגות
+            "confidence_interval_95": list(ci_tuple),
         }
 
         # בדיקת נורמליות

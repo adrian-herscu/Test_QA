@@ -8,16 +8,17 @@ This example shows how the framework handles various measurement errors:
 - Empty responses
 - Invalid values
 
-Run this after starting the ammeter emulators with: python main.py
+Run this after starting the ammeter emulators with: python examples/run_emulators.py
 """
 
 import time
-from src.testing.error_simulator import ErrorSimulator
-from src.testing.data_collector import DataCollector
-from src.utils.config import load_config
+from typing import Any, Dict
+from test_qa.testing.error_simulator import ErrorSimulator
+from test_qa.testing.data_collector import DataCollector
+from test_qa.utils.config import load_config
 
 
-def run_error_simulation_demo():
+def run_error_simulation_demo() -> None:
     """Demonstrate error handling with simulated failures"""
 
     print("=" * 60)
@@ -26,10 +27,10 @@ def run_error_simulation_demo():
     print("\nThis demo shows how the framework handles measurement errors.\n")
 
     # Load config
-    config = load_config("config/test_config.yaml")
+    config: Dict[str, Any] = load_config("config/test_config.yaml")
 
     # Configure error simulator with 20% error rate
-    error_config = {
+    error_config: Dict[str, Any] = {
         "enabled": True,
         "error_rate": 0.2,  # 20% of measurements will fail
         "error_types": {
@@ -58,9 +59,7 @@ def run_error_simulation_demo():
 
         for i in range(20):
             try:
-                ammeter_config = config["ammeters"][ammeter_type]
-                measurement = collector._get_measurement(
-                    ammeter_type, ammeter_config)
+                measurement = collector.get_single_measurement(ammeter_type)
                 successes += 1
                 print(f"  ✓ Measurement {i+1}: {measurement:.2f}A")
             except Exception as e:
@@ -88,7 +87,7 @@ def run_error_simulation_demo():
     # Show error breakdown
     if collector.errors_encountered:
         print(f"\nError breakdown by type:")
-        error_types = {}
+        error_types: Dict[str, int] = {}
         for error in collector.errors_encountered:
             error_type = error['error_type']
             error_types[error_type] = error_types.get(error_type, 0) + 1
@@ -111,7 +110,7 @@ def run_error_simulation_demo():
 
 if __name__ == "__main__":
     print("\nStarting error simulation demo...")
-    print("Make sure ammeter emulators are running (python main.py)\n")
+    print("Make sure ammeter emulators are running (python examples/run_emulators.py)\n")
 
     try:
         run_error_simulation_demo()
@@ -120,4 +119,4 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"\n\nDemo failed: {type(e).__name__}: {str(e)}")
         print("\nMake sure the ammeter emulators are running:")
-        print("  python main.py")
+        print("  python examples/run_emulators.py")

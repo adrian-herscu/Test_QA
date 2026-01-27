@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 NotImplementedErrorMsg = "Subclasses must implement this property."
 
 
-class AmmeterEmulatorBase(ABC):
+class BaseAmmeter(ABC):
     def __init__(self, port: int):
         self.port = port
         # Seed the random number generator for each instance
