@@ -62,7 +62,7 @@ python examples/run_emulators.py
 
 ### Installation
 
-**Requirements**: Python 3.13 or higher
+**Requirements**: Python 3.10 or higher
 
 #### Quick Setup (Recommended)
 
@@ -338,5 +338,6 @@ def test_kuku_measurements(self):
 - [ ] Import runner in `test_cases.py`
 - [ ] Add thread in test setup
 - [ ] Add test method
+
 
 The framework validates ammeter types against the configuration, so all steps are required for proper integration.
