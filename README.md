@@ -2,6 +2,42 @@
 
 This project provides emulators for different types of ammeters: Greenlee, ENTES, and CIRCUTOR. Each ammeter emulator runs on a separate thread and can respond to current measurement requests.
 
+## Installation
+
+**Requirements**: Python 3.10 or higher
+
+#### Quick Setup (Recommended)
+
+Use the automated setup script to create a virtual environment and install all dependencies in one command:
+
+**Linux/macOS:**
+```bash
+python3 setup_dev.py
+```
+
+**Windows:**
+```bash
+python setup_dev.py
+```
+
+This script will:
+1. Verify Python 3.10+ is installed
+2. Create a virtual environment (`.venv/`)
+3. Upgrade pip
+4. Install the project in editable mode
+
+Then activate the virtual environment:
+
+**Linux/macOS:**
+```bash
+source .venv/bin/activate
+```
+
+**Windows:**
+```bash
+.venv\Scripts\activate
+```
+
 ## Project Structure
 
 - `src/test_qa/` - Main package (installed with `pip install -e .`)
@@ -59,70 +95,6 @@ python examples/run_emulators.py
 ---
 
 ## Testing Framework
-
-### Installation
-
-**Requirements**: Python 3.10 or higher
-
-#### Quick Setup (Recommended)
-
-Use the automated setup script to create a virtual environment and install all dependencies in one command:
-
-**Linux/macOS:**
-```bash
-python3 setup_dev.py
-```
-
-**Windows:**
-```bash
-python setup_dev.py
-```
-
-This script will:
-1. Verify Python 3.10+ is installed
-2. Create a virtual environment (`.venv/`)
-3. Upgrade pip
-4. Install the project in editable mode
-
-Then activate the virtual environment:
-
-**Linux/macOS:**
-```bash
-source .venv/bin/activate
-```
-
-**Windows:**
-```bash
-.venv\Scripts\activate
-```
-
-#### Manual Setup
-
-If you prefer manual setup, follow these steps:
-
-**1. Create a virtual environment:**
-```bash
-python -m venv .venv
-```
-
-**2. Activate the virtual environment:**
-
-Linux/macOS:
-```bash
-source .venv/bin/activate
-```
-
-Windows:
-```bash
-.venv\Scripts\activate
-```
-
-**3. Install the project:**
-```bash
-pip install -e .
-```
-
-This will install all dependencies and make the project modules importable.
 
 ### Running Tests
 
@@ -341,3 +313,4 @@ def test_kuku_measurements(self):
 
 
 The framework validates ammeter types against the configuration, so all steps are required for proper integration.
+
