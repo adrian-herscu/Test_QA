@@ -79,7 +79,7 @@ python setup_dev.py
 ```
 
 This script will:
-1. Verify Python 3.13+ is installed
+1. Verify Python 3.10+ is installed
 2. Create a virtual environment (`.venv/`)
 3. Upgrade pip
 4. Install the project in editable mode
