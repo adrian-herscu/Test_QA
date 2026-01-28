@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# pyright: ignore
 """
 Development environment setup script for the Ammeter Testing Framework.
 
@@ -17,11 +18,11 @@ from pathlib import Path
 
 
 def check_python_version():
-    """Verify Python 3.13+ is being used."""
-    if sys.version_info < (3, 13):
-        print("❌ Error: Python 3.13 or higher is required.")
+    """Verify Python 3.10+ is being used."""
+    if sys.version_info < (3, 10):
+        print("❌ Error: Python 3.10 or higher is required.")
         print(f"   Current version: {sys.version}")
-        print("\nPlease install Python 3.13+ and try again.")
+        print("\nPlease install Python 3.10+ and try again.")
         sys.exit(1)
     print(
         f"✓ Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro} detected")

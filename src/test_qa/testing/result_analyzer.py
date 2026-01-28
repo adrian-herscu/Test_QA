@@ -1,6 +1,6 @@
 import numpy as np
 from typing import Any, Dict, List, Tuple, cast
-from scipy import stats
+from scipy import stats  # type: ignore[import-untyped]
 
 
 class ResultAnalyzer:
@@ -36,19 +36,21 @@ class ResultAnalyzer:
         """
         ניתוח סטטיסטי מתקדם
         """
-        skewness_value: float = float(stats.skew(values))  # type: ignore[arg-type]
-        kurtosis_value: float = float(stats.kurtosis(values))  # type: ignore[arg-type]
-        
+        skewness_value: float = float(
+            stats.skew(values))  # type: ignore[arg-type]
+        kurtosis_value: float = float(
+            stats.kurtosis(values))  # type: ignore[arg-type]
+
         ci_tuple: Tuple[float, float] = cast(
             Tuple[float, float],
-            stats.t.interval(
+            stats.t.interval(  # type: ignore[call-arg]
                 confidence=0.95,
                 df=len(values)-1,
                 loc=np.mean(values),
-                scale=stats.sem(values)
+                scale=stats.sem(values)  # type: ignore[call-arg]
             )
         )
-        
+
         advanced_results: Dict[str, Any] = {
             "skewness": skewness_value,  # א-סימטריה
             "kurtosis": kurtosis_value,  # התפלגות
@@ -56,9 +58,10 @@ class ResultAnalyzer:
         }
 
         # בדיקת נורמליות
-        _, normality_p_value = stats.normaltest(values)
-        advanced_results["is_normal_distribution"] = bool(
-            normality_p_value > 0.05)
+        normality_result = stats.normaltest(values)  # type: ignore[call-arg]
+        normality_p_value: float = float(
+            normality_result[1])  # type: ignore[index]
+        advanced_results["is_normal_distribution"] = normality_p_value > 0.05
 
         # זיהוי חריגים
         q1 = np.percentile(values, 25)

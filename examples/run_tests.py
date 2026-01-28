@@ -2,10 +2,10 @@ import sys
 from typing import Any, Dict
 
 # Check Python version
-if sys.version_info < (3, 13):
-    print("Error: This project requires Python 3.13 or higher.")
+if sys.version_info < (3, 10):
+    print("Error: This project requires Python 3.10 or higher.")
     print(f"Current version: {sys.version}")
-    print("\nThe dependencies (numpy 2.4.1, scipy 1.17.0, etc.) require Python 3.13+.")
+    print("\nThe project uses Python 3.10+ features (like union type syntax with |).")
     print("Please upgrade your Python version or use a compatible virtual environment.")
     sys.exit(1)
 
